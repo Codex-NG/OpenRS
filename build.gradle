@@ -1,0 +1,17 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+sourceSets {
+	main.java.srcDir 'source'
+}
+
+dependencies {
+	compile group: 'com.google.guava', name: 'guava', version: '19.0'
+	compile group: 'org.apache.ant', name: 'ant', version: '1.9.6'
+}
