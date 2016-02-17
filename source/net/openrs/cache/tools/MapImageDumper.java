@@ -48,7 +48,7 @@ import net.openrs.util.ImageFlip;
 
 /**
  * @author Kyle Friz
- * @since  Jan 23, 2016
+ * @since Jan 23, 2016
  */
 public class MapImageDumper {
 
@@ -59,17 +59,17 @@ public class MapImageDumper {
 		BufferedImage underlayImage = new BufferedImage(8193, 16385, BufferedImage.TYPE_INT_RGB);
 		BufferedImage image = new BufferedImage(8193, 16385, BufferedImage.TYPE_INT_RGB);
 		Graphics2D graphics = (Graphics2D) image.getGraphics();
-		
+
 		try (Cache cache = new Cache(FileStore.open(Constants.CACHE_PATH))) {
 			TypeListManager.initialize(cache);
 			Textures.initialize(cache);
-			
+
 			graphics.setColor(Color.RED);
 			for (int i = 0; i < 32768; i++) {
 				Region region = new Region(i);
 				int baseX = region.getBaseX();
 				int baseY = region.getBaseY();
-				
+
 				int map = cache.getFileId(5, "m" + (i >> 8) + "_" + (i & 0xFF));
 				if (map != -1) {
 					region.loadTerrain(cache.read(5, map).getData());
@@ -98,31 +98,31 @@ public class MapImageDumper {
 					}
 				}
 			}
-			
+
 			for (int i = 0; i < 32768; i++) {
 				Region region = new Region(i);
 				int baseX = region.getBaseX();
 				int baseY = region.getBaseY();
-				
+
 				for (int x = 0; x < 64; x++) {
 					for (int y = 0; y < 64; y++) {
 						int dx = baseX + x;
 						int dy = baseY + y;
-						
+
 						Color c = new Color(underlayImage.getRGB(dx, dy));
-						
+
 						if (Color.CYAN.equals(c))
 							continue;
-						
+
 						int tRed = 0, tGreen = 0, tBlue = 0;
 						int count = 0;
 						for (int oy = Math.max(0, dy - 5); oy < Math.min(underlayImage.getHeight(), dy + 5); oy++) {
 							for (int ox = Math.max(0, dx - 5); ox < Math.min(underlayImage.getWidth(), dx + 5); ox++) {
 								c = new Color(underlayImage.getRGB(ox, oy));
-								
+
 								if (Color.CYAN.equals(c))
 									continue;
-								
+
 								tRed += c.getRed();
 								tGreen += c.getGreen();
 								tBlue += c.getBlue();
@@ -136,12 +136,12 @@ public class MapImageDumper {
 					}
 				}
 			}
-			
+
 			for (int i = 0; i < 32768; i++) {
 				Region region = new Region(i);
 				int baseX = region.getBaseX();
 				int baseY = region.getBaseY();
-				
+
 				int map = cache.getFileId(5, "m" + (i >> 8) + "_" + (i & 0xFF));
 				if (map != -1) {
 					region.loadTerrain(cache.read(5, map).getData());
@@ -151,12 +151,11 @@ public class MapImageDumper {
 							int overlayId = region.getOverlayId(0, x, y) - 1;
 							if (overlayId > -1) {
 								OverlayType overlay = TypeListManager.lookupOver(overlayId);
-								
+
 								int rgb = 0;
 								if (overlay.isHideUnderlay())
 									rgb = overlay.getRgbColor();
-								
-								
+
 								if (overlay.getSecondaryRgbColor() > -1)
 									rgb = overlay.getSecondaryRgbColor();
 
@@ -170,13 +169,13 @@ public class MapImageDumper {
 				}
 				graphics.drawRect(baseX, baseY, 64, 64);
 			}
-			
+
 			graphics.setColor(new Color(255, 0, 0, 100));
 			for (int i = 0; i < 32768; i++) {
 				Region region = new Region(i);
 				int baseX = region.getBaseX();
 				int baseY = region.getBaseY();
-				
+
 				int[] keys = new int[] { 0, 0, 0, 0 };
 				File f = new File(Constants.KEYS_PATH, i + ".txt");
 				if (f.exists()) {
@@ -188,13 +187,13 @@ public class MapImageDumper {
 						keys[idx] = list.get(idx);
 					}
 				}
-				
+
 				int land = cache.getFileId(5, "l" + (i >> 8) + "_" + (i & 0xFF));
 				if (land != -1) {
 					ByteBuffer buffer = cache.getStore().read(5, land);
 					if (buffer.remaining() == 32)
 						continue;
-						
+
 					try {
 						Container.decode(buffer, keys);
 					} catch (Exception e) {
@@ -210,13 +209,12 @@ public class MapImageDumper {
 				Region region = new Region(i);
 				int baseX = region.getBaseX();
 				int baseY = ((16385 - 64) - region.getBaseY());
-				
-				
+
 				String text = String.valueOf(i);
 				int width = graphics.getFontMetrics().stringWidth(text) / 2;
 				flippedGraphics.drawString(text, ((baseX + 31) - width), (baseY + 36));
 			}
-			
+
 			ImageIO.write(flipped, "png", new File("map_image.png"));
 			ImageIO.write(ImageFlip.verticalFlip(underlayImage), "png", new File("underlay_image.png"));
 		} catch (IOException e) {

@@ -23,19 +23,19 @@ package net.openrs.util;
 
 /**
  * @author Kyle Friz
- * @since  Feb 11, 2016
+ * @since Feb 11, 2016
  */
 public class Masks {
 
 	private static final int[] MASKS = new int[32];
-	
+
 	static {
 		for (int i = 0; i < 32; i++)
 			MASKS[i] = (1 << i) - 1;
 	}
-	
+
 	public static final int getMask(int i) {
 		return MASKS[i];
 	}
-	
+
 }

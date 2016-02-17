@@ -30,7 +30,7 @@ import net.openrs.cache.type.TypeListManager;
 
 /**
  * @author Kyle Friz
- * @since  Jan 23, 2016
+ * @since Jan 23, 2016
  */
 public class TypeDumper {
 

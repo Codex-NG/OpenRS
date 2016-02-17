@@ -62,10 +62,11 @@ public class VarBitTypeList implements TypeList<VarBitType> {
 		try {
 			Container container = Container.decode(cache.getStore().read(CacheIndex.REFERENCE, CacheIndex.CONFIGS));
 			ReferenceTable table = ReferenceTable.decode(container.getData());
-			
+
 			Entry entry = table.getEntry(ConfigArchive.VARBIT);
-			Archive archive = Archive.decode(cache.read(CacheIndex.CONFIGS, ConfigArchive.VARBIT).getData(), entry.size());
-			
+			Archive archive = Archive.decode(cache.read(CacheIndex.CONFIGS, ConfigArchive.VARBIT).getData(),
+					entry.size());
+
 			varBits = new VarBitType[entry.capacity()];
 			for (int id = 0; id < entry.capacity(); id++) {
 				ChildEntry child = entry.getEntry(id);

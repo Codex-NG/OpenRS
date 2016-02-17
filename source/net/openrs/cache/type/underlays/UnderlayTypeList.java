@@ -62,10 +62,11 @@ public class UnderlayTypeList implements TypeList<UnderlayType> {
 		try {
 			Container container = Container.decode(cache.getStore().read(CacheIndex.REFERENCE, CacheIndex.CONFIGS));
 			ReferenceTable table = ReferenceTable.decode(container.getData());
-			
+
 			Entry entry = table.getEntry(ConfigArchive.UNDERLAY);
-			Archive archive = Archive.decode(cache.read(CacheIndex.CONFIGS, ConfigArchive.UNDERLAY).getData(), entry.size());
-			
+			Archive archive = Archive.decode(cache.read(CacheIndex.CONFIGS, ConfigArchive.UNDERLAY).getData(),
+					entry.size());
+
 			lays = new UnderlayType[entry.capacity()];
 			for (int id = 0; id < entry.capacity(); id++) {
 				ChildEntry child = entry.getEntry(id);

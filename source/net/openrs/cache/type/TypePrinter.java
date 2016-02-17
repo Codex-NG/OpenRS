@@ -31,16 +31,16 @@ import java.util.Map;
 
 /**
  * @author Kyle Friz
- * @since  Feb 13, 2016
+ * @since Feb 13, 2016
  */
 public class TypePrinter {
 
 	private static final Map<Class<? extends Type>, Type> cached = new HashMap<>();
-	
+
 	public static void print(Type type) {
 		print(type, null);
 	}
-	
+
 	public static void print(Type type, BufferedWriter writer) {
 		StringBuilder builder = new StringBuilder();
 		builder.append("case " + type.getID() + ":\n");
@@ -50,16 +50,16 @@ public class TypePrinter {
 				dType = type.getClass().getConstructor(int.class).newInstance(-1);
 				cached.put(type.getClass(), dType);
 			}
-			
+
 			for (Field field : type.getClass().getDeclaredFields()) {
 				if (Modifier.isFinal(field.getModifiers()))
 					continue;
-				
+
 				String fn = field.getName();
 
 				Object de = get(dType, dType.getClass().getDeclaredField(fn));
 				Object ac = get(type, field);
-				
+
 				if (ac != null) {
 					if (de == null || !ac.equals(de))
 						builder.append("\ttype." + fn + " = " + ac + ";\n");
@@ -69,7 +69,7 @@ public class TypePrinter {
 			e.printStackTrace();
 		}
 		builder.append("break;\n\n");
-		
+
 		if (writer == null)
 			System.out.println(builder.toString());
 		else {
@@ -80,21 +80,24 @@ public class TypePrinter {
 			}
 		}
 	}
-	
+
 	public static Object get(Object instance, Field field) throws Exception {
 		field.setAccessible(true);
 		Class<?> type = field.getType();
-		if(type == String.class) {
+		if (type == String.class) {
 			return "\"" + field.get(instance) + "\"";
-		} if(type == char.class) {
+		}
+		if (type == char.class) {
 			return "\'" + field.get(instance) + "\'";
 		} else if (type == int[].class) {
 			String array = Arrays.toString((int[]) field.get(instance));
 			return "new int[] " + array.replace("[", "{ ").replace("]", " }");
 		} else if (type == int[][].class) {
-			return "new int[][] " + Arrays.deepToString((int[][]) field.get(instance)).replace('[', '{').replace(']', '}');
-		}  else if (type == short[][].class) {
-			return "new short[][] " + Arrays.deepToString((short[][]) field.get(instance)).replace('[', '{').replace(']', '}');
+			return "new int[][] "
+					+ Arrays.deepToString((int[][]) field.get(instance)).replace('[', '{').replace(']', '}');
+		} else if (type == short[][].class) {
+			return "new short[][] "
+					+ Arrays.deepToString((short[][]) field.get(instance)).replace('[', '{').replace(']', '}');
 		} else if (type == byte[].class) {
 			String array = Arrays.toString((byte[]) field.get(instance));
 			return "new byte[] " + array.replace("[", "{ ").replace("]", " }");
@@ -102,23 +105,26 @@ public class TypePrinter {
 			String array = Arrays.toString((short[]) field.get(instance));
 			return "new short[] " + array.replace("[", "{ ").replace("]", " }");
 		} else if (type == double[].class) {
-			return "new double[] " + Arrays.toString((double[]) field.get(instance)).replace("[", "{ ").replace("]", " }");
+			return "new double[] "
+					+ Arrays.toString((double[]) field.get(instance)).replace("[", "{ ").replace("]", " }");
 		} else if (type == boolean[].class) {
-			return "new boolean[] " + Arrays.toString((boolean[]) field.get(instance)).replace("[", "{ ").replace("]", " }");
+			return "new boolean[] "
+					+ Arrays.toString((boolean[]) field.get(instance)).replace("[", "{ ").replace("]", " }");
 		} else if (type == float[].class) {
-			return "new float[] " + Arrays.toString((float[]) field.get(instance)).replace("[", "{ ").replace("]", " }");
+			return "new float[] "
+					+ Arrays.toString((float[]) field.get(instance)).replace("[", "{ ").replace("]", " }");
 		} else if (type == String[].class) {
 			String[] array = (String[]) field.get(instance);
-			if(array != null) {
+			if (array != null) {
 				StringBuilder sb = new StringBuilder();
 				sb.append("new String[] { ");
 				for (int ind = 0; ind < array.length; ind++) {
-					if(array[ind] != null)
+					if (array[ind] != null)
 						sb.append("\"");
 					sb.append(array[ind]);
-					if(array[ind] != null)
+					if (array[ind] != null)
 						sb.append("\"");
-					if(ind == array.length-1)
+					if (ind == array.length - 1)
 						sb.append(" }");
 					else
 						sb.append(", ");
@@ -129,16 +135,16 @@ public class TypePrinter {
 			}
 		} else if (type == char[].class) {
 			char[] array = (char[]) field.get(instance);
-			if(array != null) {
+			if (array != null) {
 				StringBuilder sb = new StringBuilder();
 				sb.append("new char[] { ");
 				for (int ind = 0; ind < array.length; ind++) {
-					if(array[ind] != '\u0000')
+					if (array[ind] != '\u0000')
 						sb.append("\'");
 					sb.append(array[ind]);
-					if(array[ind] != '\u0000')
+					if (array[ind] != '\u0000')
 						sb.append("\'");
-					if(ind == array.length-1)
+					if (ind == array.length - 1)
 						sb.append(" }");
 					else
 						sb.append(", ");
@@ -152,5 +158,5 @@ public class TypePrinter {
 		}
 		return field.get(instance);
 	}
-	
+
 }

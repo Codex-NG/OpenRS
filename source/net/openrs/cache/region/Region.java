@@ -61,7 +61,8 @@ public class Region {
 						int attribute = buf.get() & 0xFF;
 						if (attribute == 0) {
 							if (z == 0) {
-								tileHeights[z][x][y] = -1;//TODO calculate tile height
+								tileHeights[z][x][y] = -1;// TODO calculate tile
+															// height
 							} else
 								tileHeights[z][x][y] = tileHeights[z - 1][x][y] - 240;
 
@@ -75,7 +76,7 @@ public class Region {
 								tileHeights[0][x][y] = 8 * -height;
 							else
 								tileHeights[z][x][y] = tileHeights[z - 1][x][y] - height * 8;
-							
+
 							break;
 						} else if (attribute <= 49) {
 							overlayIds[z][x][y] = buf.get();
@@ -98,14 +99,14 @@ public class Region {
 	public final int getRegionID() {
 		return regionID;
 	}
-	
+
 	/**
 	 * @return the baseX
 	 */
 	public final int getBaseX() {
 		return baseX;
 	}
-	
+
 	/**
 	 * @return the baseY
 	 */

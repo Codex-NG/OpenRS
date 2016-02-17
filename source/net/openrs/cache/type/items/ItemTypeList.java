@@ -59,7 +59,7 @@ public class ItemTypeList implements TypeList<ItemType> {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.sean.openrs.type.TypeList#initialize(com.sean.openrs.Cache)
+	 * @see net.openrs.cache.type.TypeList#initialize(net.openrs.cache.Cache)
 	 */
 	@Override
 	public void initialize(Cache cache) {
@@ -67,10 +67,11 @@ public class ItemTypeList implements TypeList<ItemType> {
 		try {
 			Container container = Container.decode(cache.getStore().read(CacheIndex.REFERENCE, CacheIndex.CONFIGS));
 			ReferenceTable table = ReferenceTable.decode(container.getData());
-			
+
 			Entry entry = table.getEntry(ConfigArchive.ITEM);
-			Archive archive = Archive.decode(cache.read(CacheIndex.CONFIGS, ConfigArchive.ITEM).getData(), entry.size());
-			
+			Archive archive = Archive.decode(cache.read(CacheIndex.CONFIGS, ConfigArchive.ITEM).getData(),
+					entry.size());
+
 			items = new ItemType[entry.capacity()];
 			for (int id = 0; id < entry.capacity(); id++) {
 				ChildEntry child = entry.getEntry(id);
@@ -92,7 +93,7 @@ public class ItemTypeList implements TypeList<ItemType> {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.sean.openrs.type.TypeList#list(int)
+	 * @see net.openrs.cache.type.TypeList#list(int)
 	 */
 	@Override
 	public ItemType list(int id) {

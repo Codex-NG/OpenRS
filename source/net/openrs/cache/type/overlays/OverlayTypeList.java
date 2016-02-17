@@ -62,10 +62,11 @@ public class OverlayTypeList implements TypeList<OverlayType> {
 		try {
 			Container container = Container.decode(cache.getStore().read(CacheIndex.REFERENCE, CacheIndex.CONFIGS));
 			ReferenceTable table = ReferenceTable.decode(container.getData());
-			
+
 			Entry entry = table.getEntry(ConfigArchive.OVERLAY);
-			Archive archive = Archive.decode(cache.read(CacheIndex.CONFIGS, ConfigArchive.OVERLAY).getData(), entry.size());
-			
+			Archive archive = Archive.decode(cache.read(CacheIndex.CONFIGS, ConfigArchive.OVERLAY).getData(),
+					entry.size());
+
 			lays = new OverlayType[entry.capacity()];
 			for (int id = 0; id < entry.capacity(); id++) {
 				ChildEntry child = entry.getEntry(id);

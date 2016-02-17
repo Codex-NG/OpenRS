@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package net.openrs.cache.type.varclientstrings;
+package net.openrs.cache.type.invs;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -50,11 +50,11 @@ import net.openrs.cache.type.TypePrinter;
  * 
  * @since May 26, 2015
  */
-public class VarClientStringTypeList implements TypeList<VarClientStringType> {
+public class InvTypeList implements TypeList<InvType> {
 
-	private Logger logger = Logger.getLogger(VarClientStringTypeList.class.getName());
+	private Logger logger = Logger.getLogger(InvTypeList.class.getName());
 
-	private VarClientStringType[] varClients;
+	private InvType[] invs;
 
 	@Override
 	public void initialize(Cache cache) {
@@ -63,40 +63,39 @@ public class VarClientStringTypeList implements TypeList<VarClientStringType> {
 			Container container = Container.decode(cache.getStore().read(CacheIndex.REFERENCE, CacheIndex.CONFIGS));
 			ReferenceTable table = ReferenceTable.decode(container.getData());
 
-			Entry entry = table.getEntry(ConfigArchive.VARCLIENTSTRING);
-			Archive archive = Archive.decode(cache.read(CacheIndex.CONFIGS, ConfigArchive.VARCLIENTSTRING).getData(),
-					entry.size());
+			Entry entry = table.getEntry(ConfigArchive.INV);
+			Archive archive = Archive.decode(cache.read(CacheIndex.CONFIGS, ConfigArchive.INV).getData(), entry.size());
 
-			varClients = new VarClientStringType[entry.capacity()];
+			invs = new InvType[entry.capacity()];
 			for (int id = 0; id < entry.capacity(); id++) {
 				ChildEntry child = entry.getEntry(id);
 				if (child == null)
 					continue;
 
 				ByteBuffer buffer = archive.getEntry(child.index());
-				VarClientStringType type = new VarClientStringType(id);
+				InvType type = new InvType(id);
 				type.decode(buffer);
-				varClients[id] = type;
+				invs[id] = type;
 				count++;
 			}
 		} catch (IOException e) {
-			logger.log(Level.SEVERE, "Error Loading VarClientStringType(s)!", e);
+			logger.log(Level.SEVERE, "Error Loading InvType(s)!", e);
 		}
-		logger.info("Loaded " + count + " VarClientStringType(s)!");
+		logger.info("Loaded " + count + " InvType(s)!");
 	}
 
 	@Override
-	public VarClientStringType list(int id) {
+	public InvType list(int id) {
 		Preconditions.checkArgument(id >= 0, "ID can't be negative!");
-		Preconditions.checkArgument(id < varClients.length, "ID can't be greater than the max var client string id!");
-		return varClients[id];
+		Preconditions.checkArgument(id < invs.length, "ID can't be greater than the max inv id! " + id);
+		return invs[id];
 	}
 
 	@Override
 	public void print() {
-		File file = new File(Constants.TYPE_PATH, "varclientstrings.txt");
+		File file = new File(Constants.TYPE_PATH, "invs.txt");
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-			Arrays.stream(varClients).filter(Objects::nonNull).forEach((VarClientStringType t) -> {
+			Arrays.stream(invs).filter(Objects::nonNull).forEach((InvType t) -> {
 				TypePrinter.print(t, writer);
 			});
 			writer.flush();

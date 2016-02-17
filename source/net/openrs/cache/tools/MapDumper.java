@@ -62,14 +62,13 @@ public class MapDumper {
 				int map = cache.getFileId(5, "m" + x + "_" + y);
 				int land = cache.getFileId(5, "l" + x + "_" + y);
 
-				
 				if (map != -1) {
 					Container container = cache.read(5, map);
 					byte[] bytes = new byte[container.getData().limit()];
 					container.getData().get(bytes);
 
 					File file = new File(Constants.MAP_PATH, "m" + x + "_" + y + ".dat");
-					
+
 					DataOutputStream dos = new DataOutputStream(new FileOutputStream(file));
 					dos.write(bytes);
 					dos.close();
@@ -82,7 +81,7 @@ public class MapDumper {
 						container.getData().get(bytes);
 
 						File file = new File(Constants.MAP_PATH, "l" + x + "_" + y + ".dat");
-						
+
 						DataOutputStream dos = new DataOutputStream(new FileOutputStream(file));
 						dos.write(bytes);
 						dos.close();

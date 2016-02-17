@@ -49,7 +49,7 @@ public final class Cache implements Closeable {
 	 * The file store that backs this cache.
 	 */
 	private final FileStore store;
-	
+
 	/**
 	 * The list of reference tables for this cache
 	 */
@@ -64,7 +64,7 @@ public final class Cache implements Closeable {
 	 */
 	public Cache(FileStore store) throws IOException {
 		this.store = store;
-		
+
 		this.references = new HashMap<>(store.getTypeCount());
 		for (int type = 0; type < store.getTypeCount(); type++) {
 			ByteBuffer buf = store.read(255, type);
@@ -77,11 +77,11 @@ public final class Cache implements Closeable {
 	public void close() throws IOException {
 		store.close();
 	}
-	
+
 	public final ReferenceTable getReferenceTable(int type) {
 		return references.get(type);
 	}
-	
+
 	public final boolean hasReferenceTable(int type) {
 		return references.containsKey(type);
 	}
@@ -110,7 +110,10 @@ public final class Cache implements Closeable {
 			byte[] whirlpool = new byte[64];
 
 			if (store.hasData()) {
-				/* if there is actually a reference table, calculate the CRC, version and whirlpool hash */
+				/*
+				 * if there is actually a reference table, calculate the CRC,
+				 * version and whirlpool hash
+				 */
 				ByteBuffer buf = store.read(255, i);
 				if (buf != null && buf.limit() > 0) {
 					ReferenceTable ref = ReferenceTable.decode(Container.decode(buf).getData());
@@ -177,7 +180,7 @@ public final class Cache implements Closeable {
 	public Container read(CacheIndex index, ConfigArchive archive) throws IOException {
 		return read(index.getID(), archive.getID());
 	}
-	
+
 	/**
 	 * Reads a file from the cache.
 	 * 
@@ -313,7 +316,7 @@ public final class Cache implements Closeable {
 			throw new IOException("Reference tables can only be modified with the low level FileStore API!");
 
 		/* increment the container's version */
-		container.setVersion(container.getVersion()/* + 1*/);
+		container.setVersion(container.getVersion()/* + 1 */);
 
 		/* decode the reference table for this index */
 		Container tableContainer = Container.decode(store.read(255, type));
@@ -353,7 +356,7 @@ public final class Cache implements Closeable {
 		}
 
 		/* update the reference table version */
-		table.setVersion(table.getVersion()/* + 1*/);
+		table.setVersion(table.getVersion()/* + 1 */);
 
 		/* save the reference table */
 		tableContainer = new Container(tableContainer.getType(), table.encode());

@@ -28,23 +28,9 @@ package net.openrs.cache.type;
  */
 public enum CacheIndex {
 
-	CLIENTSCRIPT(12), 
-	CONFIGS(2), 
-	FONTS(13), 
-	BINARY(10), 
-	INTERFACES(3), 
-	LANDSCAPES(5), 
-	MODELS(7), 
-	MUSICS1(6), 
-	MUSICS2(11), 
-	REFERENCE(255), 
-	SKELETONS(0), 
-	SKINS(1), 
-	SOUNDEFFECTS1(4), 
-	SOUNDEFFECTS2(14), 
-	SOUNDEFFECTS3(15), 
-	SPRITES(8), 
-	TEXTURES(9);
+	BINARY(10), CLIENTSCRIPT(12), CONFIGS(2), FONTS(13), INSTRUMENTS(15), INTERFACES(3), LANDSCAPES(5), MODELS(
+			7), REFERENCE(255), SKELETONS(0), SKINS(1), SOUNDEFFECTS(4), SPRITES(8), TEXTURES(9), TRACK1(6), TRACK2(
+					11), VORBIS(14);
 
 	private final int id;
 
@@ -52,7 +38,7 @@ public enum CacheIndex {
 		this.id = id;
 	}
 
-	public int getID() {
+	public final int getID() {
 		return id;
 	}
 

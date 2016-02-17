@@ -46,7 +46,7 @@ public class OverlayType implements Type {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.sean.openrs.type.Type#decode(java.nio.ByteBuffer)
+	 * @see net.openrs.cache.type.Type#decode(java.nio.ByteBuffer)
 	 */
 	@Override
 	public void decode(ByteBuffer buffer) {
@@ -75,7 +75,7 @@ public class OverlayType implements Type {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.sean.openrs.type.Type#encode()
+	 * @see net.openrs.cache.type.Type#encode()
 	 */
 	@Override
 	public ByteBuffer encode() {
@@ -106,7 +106,7 @@ public class OverlayType implements Type {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.sean.openrs.type.Type#getID()
+	 * @see net.openrs.cache.type.Type#getID()
 	 */
 	@Override
 	public int getID() {

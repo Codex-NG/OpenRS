@@ -55,7 +55,7 @@ public class VarClientStringType implements Type {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.sean.openrs.type.Type#encode()
+	 * @see net.openrs.cache.type.Type#encode()
 	 */
 	@Override
 	public ByteBuffer encode() {

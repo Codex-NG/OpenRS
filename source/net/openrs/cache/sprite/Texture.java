@@ -25,7 +25,7 @@ import java.nio.ByteBuffer;
 
 /**
  * @author Kyle Friz
- * @since  Jan 27, 2016
+ * @since Jan 27, 2016
  */
 public class Texture {
 
@@ -33,18 +33,18 @@ public class Texture {
 		buffer.getShort();
 		buffer.get();
 		int count = buffer.get() & 0xFF;
-		
+
 		Texture texture = new Texture(count);
-		
+
 		for (int i = 0; i < count; i++) {
 			texture.fileIds[i] = buffer.getShort() & 0xFFFF;
 		}
-		
+
 		return texture;
 	}
-	
+
 	private final int[] fileIds;
-	
+
 	public Texture(int count) {
 		this.fileIds = new int[count];
 	}
@@ -52,5 +52,5 @@ public class Texture {
 	public int getIds(int i) {
 		return fileIds[i];
 	}
-	
+
 }

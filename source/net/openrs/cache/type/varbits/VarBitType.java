@@ -64,7 +64,7 @@ public class VarBitType implements Type {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.sean.openrs.type.Type#encode()
+	 * @see net.openrs.cache.type.Type#encode()
 	 */
 	@Override
 	public ByteBuffer encode() {
@@ -113,7 +113,7 @@ public class VarBitType implements Type {
 	public int set(int oVal, int nVal) {
 		int least = getLeastSigBit();
 		int most = getMostSigBit();
-		int mask = Masks.getMask(most - least); 
+		int mask = Masks.getMask(most - least);
 		if (nVal < 0 || nVal > mask) {
 			throw new Error("Value out of bit range:" + nVal + ", MAX:" + mask);
 		}

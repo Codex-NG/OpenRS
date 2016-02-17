@@ -342,7 +342,7 @@ public class ReferenceTable {
 	 * hash.
 	 */
 	public static final int FLAG_HASH = 0x08;
-	
+
 	/**
 	 * Decodes the slave checksum table contained in the specified
 	 * {@link ByteBuffer}.
@@ -354,7 +354,7 @@ public class ReferenceTable {
 	public static ReferenceTable decode(ByteBuffer buffer) {
 		/* create a new table */
 		ReferenceTable table = new ReferenceTable();
-		
+
 		/* read header */
 		table.format = buffer.get() & 0xFF;
 		if (table.format < 5 || table.format > 7) {

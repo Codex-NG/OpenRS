@@ -187,7 +187,7 @@ public final class FileStore implements Closeable {
 
 		metaChannel.close();
 	}
-	
+
 	public boolean hasData() throws IOException {
 		return dataChannel.size() > 0;
 	}

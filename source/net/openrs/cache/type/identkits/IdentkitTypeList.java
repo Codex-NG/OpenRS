@@ -62,10 +62,11 @@ public class IdentkitTypeList implements TypeList<IdentkitType> {
 		try {
 			Container container = Container.decode(cache.getStore().read(CacheIndex.REFERENCE, CacheIndex.CONFIGS));
 			ReferenceTable table = ReferenceTable.decode(container.getData());
-			
+
 			Entry entry = table.getEntry(ConfigArchive.IDENTKIT);
-			Archive archive = Archive.decode(cache.read(CacheIndex.CONFIGS, ConfigArchive.IDENTKIT).getData(), entry.size());
-			
+			Archive archive = Archive.decode(cache.read(CacheIndex.CONFIGS, ConfigArchive.IDENTKIT).getData(),
+					entry.size());
+
 			kits = new IdentkitType[entry.capacity()];
 			for (int id = 0; id < entry.capacity(); id++) {
 				ChildEntry child = entry.getEntry(id);
@@ -103,5 +104,5 @@ public class IdentkitTypeList implements TypeList<IdentkitType> {
 			e.printStackTrace();
 		}
 	}
-	
+
 }

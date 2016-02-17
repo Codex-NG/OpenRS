@@ -91,7 +91,7 @@ public class ChecksumTable {
 		/* find out how many entries there are and allocate a new table */
 		int size = whirlpool ? (buffer.get() & 0xFF) : (buffer.limit() / 8);
 		ChecksumTable table = new ChecksumTable(size);
-		
+
 		/* calculate the whirlpool digest we expect to have at the end */
 		byte[] masterDigest = null;
 		if (whirlpool) {

@@ -41,7 +41,7 @@ public class MapVerifier {
 
 	public static void main(String[] args) {
 		int count = 0;
-		
+
 		try {
 			Cache cache = new Cache(FileStore.open(Constants.CACHE_PATH));
 			for (int i = 0; i < 16_000; i++) {

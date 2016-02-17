@@ -64,10 +64,11 @@ public class SpotAnimTypeList implements TypeList<SpotAnimType> {
 		try {
 			Container container = Container.decode(cache.getStore().read(CacheIndex.REFERENCE, CacheIndex.CONFIGS));
 			ReferenceTable table = ReferenceTable.decode(container.getData());
-			
+
 			Entry entry = table.getEntry(ConfigArchive.SPOTANIM);
-			Archive archive = Archive.decode(cache.read(CacheIndex.CONFIGS, ConfigArchive.SPOTANIM).getData(), entry.size());
-			
+			Archive archive = Archive.decode(cache.read(CacheIndex.CONFIGS, ConfigArchive.SPOTANIM).getData(),
+					entry.size());
+
 			spots = new SpotAnimType[entry.capacity()];
 			for (int id = 0; id < entry.capacity(); id++) {
 				ChildEntry child = entry.getEntry(id);
