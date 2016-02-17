@@ -45,7 +45,7 @@ public class VarClientStringType implements Type {
 		while (true) {
 			int opcode = buffer.get() & 0xFF;
 			if (opcode == 0)
-				return;
+				break;
 
 			if (opcode == 2)
 				serialize = true;

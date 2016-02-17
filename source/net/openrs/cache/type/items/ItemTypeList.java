@@ -21,6 +21,9 @@
  */
 package net.openrs.cache.type.items;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
@@ -32,6 +35,7 @@ import com.google.common.base.Preconditions;
 
 import net.openrs.cache.Archive;
 import net.openrs.cache.Cache;
+import net.openrs.cache.Constants;
 import net.openrs.cache.Container;
 import net.openrs.cache.ReferenceTable;
 import net.openrs.cache.ReferenceTable.ChildEntry;
@@ -99,9 +103,15 @@ public class ItemTypeList implements TypeList<ItemType> {
 
 	@Override
 	public void print() {
-		Arrays.stream(items).filter(Objects::nonNull).forEach((ItemType t) -> {
-			TypePrinter.print(t, "items/");
-		});
+		File file = new File(Constants.TYPE_PATH, "items.txt");
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+			Arrays.stream(items).filter(Objects::nonNull).forEach((ItemType t) -> {
+				TypePrinter.print(t, writer);
+			});
+			writer.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

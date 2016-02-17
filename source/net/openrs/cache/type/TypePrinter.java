@@ -22,15 +22,12 @@
 package net.openrs.cache.type;
 
 import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-
-import net.openrs.cache.Constants;
 
 /**
  * @author Kyle Friz
@@ -44,8 +41,9 @@ public class TypePrinter {
 		print(type, null);
 	}
 	
-	public static void print(Type type, String directory) {
+	public static void print(Type type, BufferedWriter writer) {
 		StringBuilder builder = new StringBuilder();
+		builder.append("case " + type.getID() + ":\n");
 		try {
 			Type dType = cached.get(type.getClass());
 			if (dType == null) {
@@ -53,7 +51,6 @@ public class TypePrinter {
 				cached.put(type.getClass(), dType);
 			}
 			
-			builder.append("case " + type.getID() + ":\n");
 			for (Field field : type.getClass().getDeclaredFields()) {
 				if (Modifier.isFinal(field.getModifiers()))
 					continue;
@@ -68,22 +65,17 @@ public class TypePrinter {
 						builder.append("\ttype." + fn + " = " + ac + ";\n");
 				}
 			}
-			builder.append("break;");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		builder.append("break;\n\n");
 		
-		if (directory == null)
+		if (writer == null)
 			System.out.println(builder.toString());
 		else {
-			File file = new File(Constants.TYPE_PATH + directory, type.getID() + ".txt");
-			if (!file.getParentFile().exists())
-				file.getParentFile().mkdirs();
-			
-			try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-				writer.write(builder.toString());
-				writer.flush();
-			} catch (Exception e) {
+			try {
+				writer.append(builder.toString());
+			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}

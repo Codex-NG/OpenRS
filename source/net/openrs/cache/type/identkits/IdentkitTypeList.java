@@ -21,6 +21,9 @@
  */
 package net.openrs.cache.type.identkits;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
@@ -32,6 +35,7 @@ import com.google.common.base.Preconditions;
 
 import net.openrs.cache.Archive;
 import net.openrs.cache.Cache;
+import net.openrs.cache.Constants;
 import net.openrs.cache.Container;
 import net.openrs.cache.ReferenceTable;
 import net.openrs.cache.ReferenceTable.ChildEntry;
@@ -89,9 +93,15 @@ public class IdentkitTypeList implements TypeList<IdentkitType> {
 
 	@Override
 	public void print() {
-		Arrays.stream(kits).filter(Objects::nonNull).forEach((IdentkitType t) -> {
-			TypePrinter.print(t, "identkits/");
-		});
+		File file = new File(Constants.TYPE_PATH, "idenkits.txt");
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+			Arrays.stream(kits).filter(Objects::nonNull).forEach((IdentkitType t) -> {
+				TypePrinter.print(t, writer);
+			});
+			writer.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 }

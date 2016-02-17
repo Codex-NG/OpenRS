@@ -84,11 +84,15 @@ public class MapImageDumper {
 									UnderlayType underlay = TypeListManager.lookupUnder(underlayId);
 									int rgb = underlay.getRgbColor();
 									underlayImage.setRGB(baseX + x, baseY + y, rgb);
+								} else {
+									underlayImage.setRGB(baseX + x, baseY + y, Color.CYAN.getRGB());
 								}
 							} else if (underlayId > -1) {
 								UnderlayType underlay = TypeListManager.lookupUnder(underlayId);
 								int rgb = underlay.getRgbColor();
 								underlayImage.setRGB(baseX + x, baseY + y, rgb);
+							} else {
+								underlayImage.setRGB(baseX + x, baseY + y, Color.CYAN.getRGB());
 							}
 						}
 					}
@@ -105,11 +109,19 @@ public class MapImageDumper {
 						int dx = baseX + x;
 						int dy = baseY + y;
 						
+						Color c = new Color(underlayImage.getRGB(dx, dy));
+						
+						if (Color.CYAN.equals(c))
+							continue;
+						
 						int tRed = 0, tGreen = 0, tBlue = 0;
 						int count = 0;
 						for (int oy = Math.max(0, dy - 5); oy < Math.min(underlayImage.getHeight(), dy + 5); oy++) {
 							for (int ox = Math.max(0, dx - 5); ox < Math.min(underlayImage.getWidth(), dx + 5); ox++) {
-								Color c = new Color(underlayImage.getRGB(ox, oy));
+								c = new Color(underlayImage.getRGB(ox, oy));
+								
+								if (Color.CYAN.equals(c))
+									continue;
 								
 								tRed += c.getRed();
 								tGreen += c.getGreen();
@@ -117,8 +129,10 @@ public class MapImageDumper {
 								count++;
 							}
 						}
-						Color c = new Color(tRed / count, tGreen / count, tBlue / count);
-						image.setRGB(dx, dy, c.getRGB());
+						if (count > 0) {
+							c = new Color(tRed / count, tGreen / count, tBlue / count);
+							image.setRGB(dx, dy, c.getRGB());
+						}
 					}
 				}
 			}
@@ -135,32 +149,23 @@ public class MapImageDumper {
 					for (int x = 0; x < 64; x++) {
 						for (int y = 0; y < 64; y++) {
 							int overlayId = region.getOverlayId(0, x, y) - 1;
-							int underlayId = region.getUnderlayId(0, x, y) - 1;
 							if (overlayId > -1) {
 								OverlayType overlay = TypeListManager.lookupOver(overlayId);
-								int rgb;
-								if (!overlay.isHideUnderlay() && (underlayId > -1)) {
-									UnderlayType underlay = TypeListManager.lookupUnder(underlayId);
-									rgb = underlay.getRgbColor();
-								} else {
+								
+								int rgb = 0;
+								if (overlay.isHideUnderlay())
 									rgb = overlay.getRgbColor();
-								}
-
+								
+								
 								if (overlay.getSecondaryRgbColor() > -1)
 									rgb = overlay.getSecondaryRgbColor();
-								
+
 								if (overlay.getTexture() > -1)
 									rgb = Textures.getColors(overlay.getTexture());
 
-								underlayImage.setRGB(baseX + x, baseY + y, rgb);
 								image.setRGB(baseX + x, baseY + y, rgb);
-							} else if (underlayId > -1) {
-								UnderlayType underlay = TypeListManager.lookupUnder(underlayId);
-								int rgb = underlay.getRgbColor();
-								if (rgb == 0)
-									image.setRGB(baseX + x, baseY + y, rgb);
 							}
-						} 
+						}
 					}
 				}
 				graphics.drawRect(baseX, baseY, 64, 64);
@@ -209,7 +214,7 @@ public class MapImageDumper {
 				
 				String text = String.valueOf(i);
 				int width = graphics.getFontMetrics().stringWidth(text) / 2;
-				flippedGraphics.drawString(text, ((baseX + 32) - width), (baseY + 36));
+				flippedGraphics.drawString(text, ((baseX + 31) - width), (baseY + 36));
 			}
 			
 			ImageIO.write(flipped, "png", new File("map_image.png"));
