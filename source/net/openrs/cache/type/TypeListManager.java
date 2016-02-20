@@ -58,36 +58,92 @@ import net.openrs.cache.type.varplayers.VarPlayerTypeList;
  */
 public class TypeListManager {
 
+	private static final SpotAnimTypeList spot = new SpotAnimTypeList();
+	private static final EnumTypeList enm = new EnumTypeList();
+	private static final IdentkitTypeList ident = new IdentkitTypeList();
+	private static final InvTypeList inv = new InvTypeList();
 	private static final ItemTypeList item = new ItemTypeList();
 	private static final NpcTypeList npc = new NpcTypeList();
+	private static final ObjectTypeList obj = new ObjectTypeList();
+	private static final OverlayTypeList over = new OverlayTypeList();
+	private static final SequenceTypeList seq = new SequenceTypeList();
+	private static final UnderlayTypeList under = new UnderlayTypeList();
 	private static final VarBitTypeList varbit = new VarBitTypeList();
-	private static final VarPlayerTypeList varp = new VarPlayerTypeList();
 	private static final VarClientTypeList varc = new VarClientTypeList();
 	private static final VarClientStringTypeList varcstr = new VarClientStringTypeList();
-	private static final IdentkitTypeList ident = new IdentkitTypeList();
-	private static final UnderlayTypeList under = new UnderlayTypeList();
-	private static final OverlayTypeList over = new OverlayTypeList();
-	private static final EnumTypeList enm = new EnumTypeList();
-	private static final ObjectTypeList obj = new ObjectTypeList();
-	private static final SpotAnimTypeList anim = new SpotAnimTypeList();
-	private static final SequenceTypeList seq = new SequenceTypeList();
-	private static final InvTypeList inv = new InvTypeList();
+	private static final VarPlayerTypeList varp = new VarPlayerTypeList();
 
 	public static void initialize(Cache cache) {
-		item.initialize(cache);
+		enm.initialize(cache);
 		ident.initialize(cache);
+		inv.initialize(cache);
+		item.initialize(cache);
 		npc.initialize(cache);
-		varp.initialize(cache);
+		obj.initialize(cache);
+		over.initialize(cache);
+		seq.initialize(cache);
+		spot.initialize(cache);
+		under.initialize(cache);
 		varbit.initialize(cache);
 		varc.initialize(cache);
 		varcstr.initialize(cache);
-		under.initialize(cache);
-		over.initialize(cache);
-		enm.initialize(cache);
-		obj.initialize(cache);
-		anim.initialize(cache);
-		seq.initialize(cache);
-		inv.initialize(cache);
+		varp.initialize(cache);
+	}
+
+	public static final EnumType lookupEnum(int id) {
+		return enm.list(id);
+	}
+
+	public static final IdentkitType lookupIdentkit(int id) {
+		return ident.list(id);
+	}
+
+	public static final InvType lookupInv(int id) {
+		return inv.list(id);
+	}
+
+	public static final ItemType lookupItem(int id) {
+		return item.list(id);
+	}
+
+	public static final NpcType lookupNpc(int id) {
+		return npc.list(id);
+	}
+
+	public static final ObjectType lookupObject(int id) {
+		return obj.list(id);
+	}
+
+	public static final OverlayType lookupOver(int id) {
+		return over.list(id);
+	}
+
+	public static final SequenceType lookupSequence(int id) {
+		return seq.list(id);
+	}
+
+	public static final SpotAnimType lookupSpotAnim(int id) {
+		return spot.list(id);
+	}
+
+	public static final UnderlayType lookupUnder(int id) {
+		return under.list(id);
+	}
+
+	public static final VarBitType lookupVarBit(int id) {
+		return varbit.list(id);
+	}
+
+	public static final VarClientType lookupVarClient(int id) {
+		return varc.list(id);
+	}
+
+	public static final VarClientStringType lookupVarClientString(int id) {
+		return varcstr.list(id);
+	}
+
+	public static final VarPlayerType lookupVarPlayer(int id) {
+		return varp.list(id);
 	}
 
 	public static void print() {
@@ -102,65 +158,9 @@ public class TypeListManager {
 		over.print();
 		enm.print();
 		obj.print();
-		anim.print();
+		spot.print();
 		seq.print();
 		inv.print();
-	}
-
-	public static final ItemType lookupItem(int id) {
-		return item.list(id);
-	}
-
-	public static final IdentkitType lookupIdentkit(int id) {
-		return ident.list(id);
-	}
-
-	public static final NpcType lookupNpc(int id) {
-		return npc.list(id);
-	}
-
-	public static final VarBitType lookupVarBit(int id) {
-		return varbit.list(id);
-	}
-
-	public static final VarPlayerType lookupVarPlayer(int id) {
-		return varp.list(id);
-	}
-
-	public static final VarClientType lookupVarClient(int id) {
-		return varc.list(id);
-	}
-
-	public static final VarClientStringType lookupVarClientString(int id) {
-		return varcstr.list(id);
-	}
-
-	public static final UnderlayType lookupUnder(int id) {
-		return under.list(id);
-	}
-
-	public static final OverlayType lookupOver(int id) {
-		return over.list(id);
-	}
-
-	public static final EnumType lookupEnum(int id) {
-		return enm.list(id);
-	}
-
-	public static final ObjectType lookupObject(int id) {
-		return obj.list(id);
-	}
-
-	public static final SpotAnimType lookupSpotAnim(int id) {
-		return anim.list(id);
-	}
-
-	public static final SequenceType lookupSequence(int id) {
-		return seq.list(id);
-	}
-
-	public static final InvType lookupInv(int id) {
-		return inv.list(id);
 	}
 
 }

@@ -466,6 +466,23 @@ public class ReferenceTable {
 	}
 
 	/**
+	 * Puts the data into a certain type by the format id.
+	 * 
+	 * @param val
+	 *            The value to put into the buffer.
+	 * @param os
+	 *            The stream.
+	 * @throws IOException
+	 *             The exception thrown if an i/o error occurs.
+	 */
+	public void putSmartFormat(int val, DataOutputStream os) throws IOException {
+		if (format >= 7)
+			putSmartInt(os, val);
+		else
+			os.writeShort((short) val);
+	}
+	
+	/**
 	 * Puts a smart integer into the stream.
 	 * 
 	 * @param os
@@ -703,23 +720,6 @@ public class ReferenceTable {
 	 */
 	public void putEntry(int id, Entry entry) {
 		entries.put(id, entry);
-	}
-
-	/**
-	 * Puts the data into a certain type by the format id.
-	 * 
-	 * @param val
-	 *            The value to put into the buffer.
-	 * @param os
-	 *            The stream.
-	 * @throws IOException
-	 *             The exception thrown if an i/o error occurs.
-	 */
-	public void putSmartFormat(int val, DataOutputStream os) throws IOException {
-		if (format >= 7)
-			ReferenceTable.putSmartInt(os, val);
-		else
-			os.writeShort((short) val);
 	}
 
 	/**

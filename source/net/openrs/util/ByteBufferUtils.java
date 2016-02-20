@@ -91,11 +91,9 @@ public final class ByteBufferUtils {
 	 * @return The value.
 	 */
 	public static int getSmartInt(ByteBuffer buffer) {
-		if (buffer.get(buffer.position()) < 0) {
+		if (buffer.get(buffer.position()) < 0) 
 			return buffer.getInt() & 0x7fffffff;
-		}
-		int shortValue = buffer.getShort() & 0xFFFF;
-		return shortValue == 32767 ? -1 : shortValue;
+		return buffer.getShort() & 0xFFFF;
 	}
 
 	/**

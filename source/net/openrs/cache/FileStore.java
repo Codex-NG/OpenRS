@@ -272,7 +272,7 @@ public final class FileStore implements Closeable {
 		do {
 			buf.clear();
 			FileChannelUtils.readFully(dataChannel, buf, ptr);
-			boolean extended = id > 65535;
+			boolean extended = id > 0xFFFF;
 			Sector sector = extended ? Sector.decodeExtended((ByteBuffer) buf.flip())
 					: Sector.decode((ByteBuffer) buf.flip());
 			int dataSize = extended ? Sector.EXTENDED_DATA_SIZE : Sector.DATA_SIZE;
@@ -361,7 +361,7 @@ public final class FileStore implements Closeable {
 				nextSector = 1;
 		}
 
-		boolean extended = id > 65535;
+		boolean extended = id > 0xFFFF;
 		Index index = new Index(data.remaining(), nextSector);
 		indexChannel.write(index.encode(), ptr);
 

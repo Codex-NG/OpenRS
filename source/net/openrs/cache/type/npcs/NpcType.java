@@ -156,12 +156,12 @@ public class NpcType implements Type {
 				anInt2156 = buffer.getShort() & 0xFFFF;
 			} else if (opcode == 106) {
 				anInt2174 = buffer.getShort() & 0xFFFF;
-				if (65535 == anInt2174) {
+				if (0xFFFF == anInt2174) {
 					anInt2174 = -1;
 				}
 
 				anInt2187 = buffer.getShort() & 0xFFFF;
-				if (65535 == anInt2187) {
+				if (0xFFFF == anInt2187) {
 					anInt2187 = -1;
 				}
 
@@ -170,7 +170,7 @@ public class NpcType implements Type {
 
 				for (int idx = 0; idx <= length; ++idx) {
 					anIntArray2185[idx] = buffer.getShort() & 0xFFFF;
-					if (anIntArray2185[idx] == 65535) {
+					if (anIntArray2185[idx] == 0xFFFF) {
 						anIntArray2185[idx] = -1;
 					}
 				}

@@ -134,7 +134,7 @@ public class ObjectType implements Type {
 				this.aBool2111 = true;
 			} else if (24 == opcode) {
 				this.animationID = buffer.getShort() & 0xFFFF;
-				if (this.animationID == '\uffff') {
+				if (this.animationID == 0xFFFF) {
 					this.animationID = -1;
 				}
 			} else if (opcode == 27) {
@@ -200,12 +200,12 @@ public class ObjectType implements Type {
 				this.anInt2106 = buffer.get() & 0xFF;
 			} else if (opcode == 77) {
 				this.varpID = buffer.getShort() & 0xFFFF;
-				if (this.varpID == '\uffff') {
+				if (this.varpID == 0xFFFF) {
 					this.varpID = -1;
 				}
 
 				this.configId = buffer.getShort() & 0xFFFF;
-				if (this.configId == '\uffff') {
+				if (this.configId == 0xFFFF) {
 					this.configId = -1;
 				}
 
@@ -214,7 +214,7 @@ public class ObjectType implements Type {
 
 				for (int index = 0; index <= length; ++index) {
 					this.configChangeDest[index] = buffer.getShort() & 0xFFFF;
-					if ('\uffff' == this.configChangeDest[index]) {
+					if (0xFFFF == this.configChangeDest[index]) {
 						this.configChangeDest[index] = -1;
 					}
 				}

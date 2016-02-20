@@ -152,7 +152,7 @@ public final class Sector {
 	 */
 	public ByteBuffer encode() {
 		ByteBuffer buf = ByteBuffer.allocate(SIZE);
-		if (id > 65535) {
+		if (id > 0xFFFF) {
 			buf.putInt(id);
 		} else {
 			buf.putShort((short) id);
