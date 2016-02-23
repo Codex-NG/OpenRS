@@ -61,8 +61,7 @@ public class Region {
 						int attribute = buf.get() & 0xFF;
 						if (attribute == 0) {
 							if (z == 0) {
-								tileHeights[z][x][y] = -1;// TODO calculate tile
-															// height
+								tileHeights[0][x][y] = HeightCalc.calculate(baseX, baseY, x, y) << 3;
 							} else
 								tileHeights[z][x][y] = tileHeights[z - 1][x][y] - 240;
 
@@ -73,15 +72,15 @@ public class Region {
 								height = 0;
 
 							if (z == 0)
-								tileHeights[0][x][y] = 8 * -height;
+								tileHeights[0][x][y] = -height << 3;
 							else
-								tileHeights[z][x][y] = tileHeights[z - 1][x][y] - height * 8;
+								tileHeights[z][x][y] = tileHeights[z - 1][x][y] - height << 3;
 
 							break;
 						} else if (attribute <= 49) {
 							overlayIds[z][x][y] = buf.get();
 							overlayPaths[z][x][y] = (byte) ((attribute - 2) / 4);
-							overlayRotations[z][x][y] = (byte) (attribute - 2 + 0 & 0x3);
+							overlayRotations[z][x][y] = (byte) (attribute - 2 & 0x3);
 						} else if (attribute <= 81) {
 							renderRules[z][x][y] = (byte) (attribute - 49);
 						} else {

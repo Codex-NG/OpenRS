@@ -33,14 +33,14 @@ import net.openrs.cache.type.Type;
 public class IdentkitType implements Type {
 
 	private final int id;
-	private int[] modelIDs;
-	private short[] oriTextureColors;
-	private short[] modColors;
-	private short[] oriColors;
-	private int equipSlot = -1;
-	private short[] modTextureColors;
+	private int[] modelIds;
+	private short[] retextureToFind;
+	private short[] recolorToReplace;
+	private short[] recolorToFind;
+	private int bodyPartId = -1;
+	private short[] retextureToReplace;
 	private int[] models = new int[] { -1, -1, -1, -1, -1 };
-	private boolean aBool = false;
+	private boolean nonSelectable = false;
 
 	public IdentkitType(int id) {
 		this.id = id;
@@ -59,33 +59,33 @@ public class IdentkitType implements Type {
 				break;
 
 			if (opcode == 1) {
-				this.equipSlot = buffer.get() & 0xFF;
+				this.bodyPartId = buffer.get() & 0xFF;
 			} else if (opcode == 2) {
 				int length = buffer.get() & 0xFF;
-				this.modelIDs = new int[length];
+				this.modelIds = new int[length];
 
 				for (int index = 0; index < length; ++index) {
-					this.modelIDs[index] = buffer.getShort() & 0xFFFF;
+					this.modelIds[index] = buffer.getShort() & 0xFFFF;
 				}
 			} else if (opcode == 3) {
-				this.aBool = true;
+				this.nonSelectable = true;
 			} else if (40 == opcode) {
 				int length = buffer.get() & 0xFFFF;
-				this.oriColors = new short[length];
-				this.modColors = new short[length];
+				this.recolorToFind = new short[length];
+				this.recolorToReplace = new short[length];
 
 				for (int index = 0; index < length; ++index) {
-					this.oriColors[index] = (short) (buffer.getShort() & 0xFFFF);
-					this.modColors[index] = (short) (buffer.getShort() & 0xFFFF);
+					this.recolorToFind[index] = (short) (buffer.getShort() & 0xFFFF);
+					this.recolorToReplace[index] = (short) (buffer.getShort() & 0xFFFF);
 				}
 			} else if (41 == opcode) {
 				int length = buffer.get() & 0xFF;
-				this.oriTextureColors = new short[length];
-				this.modTextureColors = new short[length];
+				this.retextureToFind = new short[length];
+				this.retextureToReplace = new short[length];
 
 				for (int index = 0; index < length; ++index) {
-					this.oriTextureColors[index] = (short) (buffer.getShort() & 0xFFFF);
-					this.modTextureColors[index] = (short) (buffer.getShort());
+					this.retextureToFind[index] = (short) (buffer.getShort() & 0xFFFF);
+					this.retextureToReplace[index] = (short) (buffer.getShort());
 				}
 			} else if (opcode >= 60 && opcode < 70) {
 				this.models[opcode - 60] = buffer.getShort() & 0xFFFF;
@@ -115,45 +115,45 @@ public class IdentkitType implements Type {
 	}
 
 	/**
-	 * @return the modelIDs
+	 * @return the modelIds
 	 */
-	public int[] getModelIDs() {
-		return modelIDs;
+	public int[] getModelIds() {
+		return modelIds;
 	}
 
 	/**
-	 * @return the oriTextureColors
+	 * @return the retextureToFind
 	 */
-	public short[] getOriTextureColors() {
-		return oriTextureColors;
+	public short[] getRetextureToFind() {
+		return retextureToFind;
 	}
 
 	/**
-	 * @return the modColors
+	 * @return the recolorToReplace
 	 */
-	public short[] getModColors() {
-		return modColors;
+	public short[] getRecolorToReplace() {
+		return recolorToReplace;
 	}
 
 	/**
-	 * @return the oriColors
+	 * @return the recolorToFind
 	 */
-	public short[] getOriColors() {
-		return oriColors;
+	public short[] getRecolorToFind() {
+		return recolorToFind;
 	}
 
 	/**
-	 * @return the equipSlot
+	 * @return the bodyPartId
 	 */
-	public int getEquipSlot() {
-		return equipSlot;
+	public int getBodyPartId() {
+		return bodyPartId;
 	}
 
 	/**
-	 * @return the modTextureColors
+	 * @return the retextureToReplace
 	 */
-	public short[] getModTextureColors() {
-		return modTextureColors;
+	public short[] getRetextureToReplace() {
+		return retextureToReplace;
 	}
 
 	/**
@@ -164,10 +164,10 @@ public class IdentkitType implements Type {
 	}
 
 	/**
-	 * @return the aBool
+	 * @return the nonSelectable
 	 */
-	public boolean isaBool() {
-		return aBool;
+	public boolean isNonSelectable() {
+		return nonSelectable;
 	}
 
 }
