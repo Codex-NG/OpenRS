@@ -31,6 +31,7 @@ import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.imageio.ImageIO;
@@ -39,6 +40,7 @@ import net.openrs.cache.Cache;
 import net.openrs.cache.Constants;
 import net.openrs.cache.Container;
 import net.openrs.cache.FileStore;
+import net.openrs.cache.region.Location;
 import net.openrs.cache.region.Region;
 import net.openrs.cache.sprite.Textures;
 import net.openrs.cache.type.TypeListManager;
@@ -170,6 +172,7 @@ public class MapImageDumper {
 				graphics.drawRect(baseX, baseY, 64, 64);
 			}
 
+			int c = 0;
 			graphics.setColor(new Color(255, 0, 0, 100));
 			for (int i = 0; i < 32768; i++) {
 				Region region = new Region(i);
@@ -195,9 +198,14 @@ public class MapImageDumper {
 						continue;
 
 					try {
-						Container.decode(buffer, keys);
+						region.loadLocations(Container.decode(buffer, keys).getData());
+						c += region.getLocations().size();
+						for (Location l : region.getLocations()) {
+							image.setRGB(l.getPosition().getX(), l.getPosition().getY(), Color.MAGENTA.getRGB());
+						}
 					} catch (Exception e) {
 						graphics.fillRect(baseX, baseY, 64, 64);
+						System.out.println(region.getRegionID() + ", " + Arrays.toString(keys));
 					}
 				}
 			}
@@ -214,7 +222,7 @@ public class MapImageDumper {
 				int width = graphics.getFontMetrics().stringWidth(text) / 2;
 				flippedGraphics.drawString(text, ((baseX + 31) - width), (baseY + 36));
 			}
-
+System.out.println(c);
 			ImageIO.write(flipped, "png", new File("map_image.png"));
 			ImageIO.write(ImageFlip.verticalFlip(underlayImage), "png", new File("underlay_image.png"));
 		} catch (IOException e) {

@@ -33,11 +33,10 @@ import net.openrs.cache.type.Type;
 public class VarPlayerType implements Type {
 
 	private final int id;
-	private int configType;
+	private int configType = 0;
 
 	public VarPlayerType(int id) {
 		this.id = id;
-		this.configType = 0;
 	}
 
 	@Override

@@ -22,11 +22,15 @@
 package net.openrs.cache.region;
 
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.List;
+
+import net.openrs.util.ByteBufferUtils;
 
 /**
- * @author Kyle Friz
  * 
- * @since Jun 30, 2015
+ * @author Kyle Friz
+ * @since  Jun 30, 2015
  */
 public class Region {
 
@@ -34,12 +38,14 @@ public class Region {
 	private final int baseX;
 	private final int baseY;
 
-	private final int[][][] tileHeights = new int[4][105][105];
+	private final int[][][] tileHeights = new int[4][104][104];
 	private final byte[][][] renderRules = new byte[4][104][104];
 	private final byte[][][] overlayIds = new byte[4][104][104];
 	private final byte[][][] overlayPaths = new byte[4][104][104];
 	private final byte[][][] overlayRotations = new byte[4][104][104];
 	private final byte[][][] underlayIds = new byte[4][104][104];
+	
+	private final List<Location> locations = new ArrayList<>();
 
 	public Region(int id) {
 		this.regionID = id;
@@ -61,6 +67,7 @@ public class Region {
 						int attribute = buf.get() & 0xFF;
 						if (attribute == 0) {
 							if (z == 0) {
+								//TODO Verify the height calculation was correctly ripped from client
 								tileHeights[0][x][y] = HeightCalc.calculate(baseX, baseY, x, y) << 3;
 							} else
 								tileHeights[z][x][y] = tileHeights[z - 1][x][y] - 240;
@@ -92,6 +99,38 @@ public class Region {
 		}
 	}
 
+	/**
+	 * Decodes location data stored in the specified {@link ByteBuffer}.
+	 *
+	 * @param buffer
+	 *            The ByteBuffer.
+	 */
+	public void loadLocations(ByteBuffer buf) {
+		int id = -1;
+		int idOffset;
+
+		while ((idOffset = ByteBufferUtils.getUnsignedSmart(buf)) != 0) {
+			id += idOffset;
+
+			int position = 0;
+			int positionOffset;
+
+			while ((positionOffset = ByteBufferUtils.getUnsignedSmart(buf)) != 0) {
+				position += positionOffset - 1;
+
+				int localY = position & 0x3F;
+				int localX = position >> 6 & 0x3F;
+				int height = position >> 12 & 0x3;
+
+				int attributes = buf.get() & 0xFF;
+				int type = attributes >> 2;
+				int orientation = attributes & 0x3;
+
+				locations.add(new Location(id, type, orientation, new Position(baseX + localX, baseY + localY, height)));
+			}
+		}
+	}
+	
 	/**
 	 * @return the regionID
 	 */
@@ -153,5 +192,12 @@ public class Region {
 	 */
 	public final int getUnderlayId(final int z, final int x, final int y) {
 		return underlayIds[z][x][y] & 0xFF;
+	}
+	
+	/**
+	 * @return the locations
+	 */
+	public final List<Location> getLocations() {
+		return locations;
 	}
 }

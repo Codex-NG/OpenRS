@@ -27,11 +27,17 @@ package net.openrs.cache.region;
  */
 public class HeightCalc {
 
-	private static final int[] COS_TABLE = new int[2048];
+	private static final int JAGEX_CIRCULAR_ANGLE = 2048;
+	private static final double ANGULAR_RATIO = 360D / JAGEX_CIRCULAR_ANGLE;
+	private static final double JAGEX_RADIAN = Math.toRadians(ANGULAR_RATIO);
+
+	private static final int[] SIN = new int[JAGEX_CIRCULAR_ANGLE];
+	private static final int[] COS = new int[JAGEX_CIRCULAR_ANGLE];
 
 	static {
-		for (int angle = 0; angle < 2048; ++angle) {
-			COS_TABLE[angle] = (int) (65536.0D * Math.cos((double) angle * 0.0030679615D));
+		for (int i = 0; i < JAGEX_CIRCULAR_ANGLE; i++) {
+			SIN[i] = (int) (65536.0D * Math.sin((double) i * JAGEX_RADIAN));
+			COS[i] = (int) (65536.0D * Math.cos((double) i * JAGEX_RADIAN));
 		}
 	}
 
@@ -83,7 +89,7 @@ public class HeightCalc {
 	}
 
 	static final int method578(int var0, int var1, int var2, int var3) {
-		int var4 = 65536 - COS_TABLE[1024 * var2 / var3] >> 1;
+		int var4 = 65536 - COS[1024 * var2 / var3] >> 1;
 		return (var4 * var1 >> 16) + (var0 * (65536 - var4) >> 16);
 	}
 

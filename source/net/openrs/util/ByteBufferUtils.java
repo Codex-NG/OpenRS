@@ -82,6 +82,36 @@ public final class ByteBufferUtils {
 		}
 		return bldr.toString();
 	}
+	
+	/**
+	 * Gets a unsigned smart from the buffer.
+	 * 
+	 * @param buffer
+	 *            The buffer.
+	 * @return The value.
+	 */
+	public static int getUnsignedSmart(ByteBuffer buf) {
+		int peek = buf.get(buf.position()) & 0xFF;
+		if (peek < 128)
+			return buf.get() & 0xFF;
+		else
+			return (buf.getShort() & 0xFFFF) - 32768;
+	}
+	
+	/**
+	 * Gets a signed smart from the buffer.
+	 * 
+	 * @param buffer
+	 *            The buffer.
+	 * @return The value.
+	 */
+	public static int getSignedSmart(ByteBuffer buf) {
+		int peek = buf.get(buf.position()) & 0xFF;
+		if (peek < 128)
+			return (buf.get() & 0xFF) - 64;
+		else
+			return (buf.getShort() & 0xFFFF) - 49152;
+	}
 
 	/**
 	 * Gets a smart integer from the buffer.

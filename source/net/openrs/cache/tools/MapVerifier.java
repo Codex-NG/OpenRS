@@ -44,7 +44,7 @@ public class MapVerifier {
 
 		try {
 			Cache cache = new Cache(FileStore.open(Constants.CACHE_PATH));
-			for (int i = 0; i < 16_000; i++) {
+			for (int i = 0; i < 32_768; i++) {
 				int[] keys = new int[] { 0, 0, 0, 0 };
 				File f = new File(Constants.KEYS_PATH, i + ".txt");
 				if (f.exists()) {
