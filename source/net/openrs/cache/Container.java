@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 
 import net.openrs.cache.util.CompressionUtils;
+import net.openrs.cache.util.XTEAManager;
 import net.openrs.util.crypto.Xtea;
 
 /**
@@ -53,11 +54,6 @@ public final class Container {
 	public static final int COMPRESSION_GZIP = 2;
 
 	/**
-	 * This is for containers which are not encrypted
-	 */
-	public static final int[] NULL_KEYS = new int[4];
-
-	/**
 	 * Decodes and decompresses the container.
 	 * 
 	 * @param buffer
@@ -67,7 +63,7 @@ public final class Container {
 	 *             if an I/O error occurs.
 	 */
 	public static Container decode(ByteBuffer buffer) throws IOException {
-		return Container.decode(buffer, NULL_KEYS);
+		return Container.decode(buffer, XTEAManager.NULL_KEYS);
 	}
 
 	/**
@@ -191,6 +187,19 @@ public final class Container {
 	 *             if an I/O error occurs.
 	 */
 	public ByteBuffer encode() throws IOException {
+		return encode(XTEAManager.NULL_KEYS);
+	}
+	
+	/**
+	 * Encodes and compresses this container.
+	 * 
+	 * @param keys
+	 *            The encryption keys
+	 * @return The buffer.
+	 * @throws IOException
+	 *             if an I/O error occurs.
+	 */
+	public ByteBuffer encode(int[] keys) throws IOException {
 		/* so we have a read only view, making this method thread safe */
 		ByteBuffer data = getData();
 
@@ -227,9 +236,15 @@ public final class Container {
 
 		/* write the compressed data */
 		buf.put(compressed);
+		
 		/* write the trailer with the optional version */
 		if (isVersioned()) {
 			buf.putShort((short) version);
+		}
+		
+		/* encrypt */
+		if (keys[0] != 0 || keys[1] != 0 || keys[2] != 0 || keys[3] != 0) {
+			Xtea.encipher(buf, 5, compressed.length + (type == COMPRESSION_NONE ? 5 : 9), keys);
 		}
 
 		/* flip the buffer and return it */

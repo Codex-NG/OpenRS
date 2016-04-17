@@ -197,6 +197,161 @@ public class NpcType implements Type {
 		ByteBuffer buffer = ByteBuffer.allocate(1132);
 		return (ByteBuffer) buffer.flip();
 	}
+	
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see net.openrs.cache.type.Type#encode317()
+	 */
+	@Override
+	public ByteBuffer encode317() {
+		ByteBuffer buffer = ByteBuffer.allocate(1132);
+		
+		if (models != null) {
+			buffer.put((byte) 1);
+			buffer.put((byte) models.length);
+			for (int i = 0; i < models.length; i++) {
+				buffer.putShort((short) models[i]);
+			}
+		}
+
+		if (name != "null") {
+			buffer.put((byte) 2);
+			ByteBufferUtils.putString317(buffer, name);
+		}
+
+		if (tileSpacesOccupied != -1) {
+			buffer.put((byte) 12);
+			buffer.put((byte) tileSpacesOccupied);
+		}
+		if (stanceAnimation != -1) {
+			buffer.put((byte) 13);
+			buffer.putShort((short) stanceAnimation);
+		}
+		if (walkAnimation != -1) {
+			buffer.put((byte) 14);
+			buffer.putShort((short) walkAnimation);
+		}
+		if (anInt2165 != -1) {
+			buffer.put((byte) 15);
+			buffer.putShort((short) anInt2165);
+		}
+		if (anInt2189 != -1) {
+			buffer.put((byte) 16);
+			buffer.putShort((short) anInt2189);
+		}
+		if (walkAnimation != -1 || rotate180Animation != -1 || rotate90RightAnimation != -1
+				|| rotate90LeftAnimation != -1) {
+			buffer.put((byte) 17);
+			buffer.putShort((short) walkAnimation);
+			buffer.putShort((short) rotate180Animation);
+			buffer.putShort((short) rotate90RightAnimation);
+			buffer.putShort((short) rotate90LeftAnimation);
+		}
+		if (options != null) {
+			for (int i = 0; i < options.length; i++) {
+				String option = options[i];
+
+				buffer.put((byte) (30 + i));
+				ByteBufferUtils.putString317(buffer, option == null ? "hidden" : option);
+			}
+		}
+
+		if (recolorToFind != null || recolorToReplace != null) {
+			buffer.put((byte) 40);
+			buffer.put((byte) recolorToFind.length);
+
+			for (int i = 0; i < recolorToFind.length; i++) {
+				buffer.putShort(recolorToFind[i]);
+				buffer.putShort(recolorToReplace[i]);
+			}
+		}
+
+		if (retextureToFind != null || retextureToReplace != null) {
+			buffer.put((byte) 41);
+			buffer.put((byte) retextureToFind.length);
+
+			for (int i = 0; i < retextureToFind.length; i++) {
+				buffer.putShort(retextureToFind[i]);
+				buffer.putShort(retextureToReplace[i]);
+			}
+		}
+		if (models_2 != null) {
+			buffer.put((byte) 60);
+			buffer.put((byte) models_2.length);
+
+			for (int i = 0; i < models_2.length; i++) {
+				buffer.putShort((short) models_2[i]);
+			}
+		}
+		if (renderOnMinimap == false) {
+			buffer.put((byte) 93);
+		}
+		if (combatLevel != -1) {
+			buffer.put((byte) 95);
+			buffer.putShort((short) combatLevel);
+		}
+		if (resizeX != 128) {
+			buffer.put((byte) 97);
+			buffer.putShort((short) resizeX);
+		}
+		if (resizeY != 128) {
+			buffer.put((byte) 98);
+			buffer.putShort((short) resizeY);
+		}
+		if (hasRenderPriority == true) {
+			buffer.put((byte) 99);
+		}
+		if (ambient != 0) {
+			buffer.put((byte) 100);
+			buffer.put((byte) ambient);
+		}
+		if (contrast != 0) {
+			buffer.put((byte) 101);
+			buffer.put((byte) contrast);
+		}
+		if (headIcon != -1) {
+			buffer.put((byte) 102);
+			buffer.putShort((byte) headIcon);
+		}
+		if (anInt2156 != 32) {
+			buffer.put((byte) 103);
+			buffer.putShort((byte) anInt2156);
+		}
+
+		if (anInt2174 != -1 || anInt2187 != -1 || anIntArray2185 != null) {
+			buffer.put((byte) 106);
+
+			buffer.putShort((short) (anInt2174 == -1 ? 65535 : anInt2174));
+			buffer.putShort((short) (anInt2187 == -1 ? 65535 : anInt2187));
+
+			buffer.put((byte) anIntArray2185.length);
+
+			for (int i = 0; i < anIntArray2185.length; i++) {
+				buffer.putShort((short) (anIntArray2185[i] == -1 ? 65535 : anIntArray2185[i]));
+			}
+		}
+
+		if (isClickable == false) {
+			buffer.put((byte) 107);
+		}
+
+		if (aBool2170 == false) {
+			buffer.put((byte) 109);
+		}
+
+		if (aBool2190 == true) {
+			buffer.put((byte) 111);
+		}
+		if (anInt2184 != -1) {
+			buffer.put((byte) 112);
+			buffer.put((byte) anInt2184);
+		}
+
+		buffer.put((byte) 0);
+		
+		return (ByteBuffer) buffer.flip();
+	}
 
 	public int getID() {
 		return id;

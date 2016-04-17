@@ -215,6 +215,17 @@ public class ItemType implements Type {
 		ByteBuffer buffer = ByteBuffer.allocate(1132);
 		return (ByteBuffer) buffer.flip();
 	}
+	
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see net.openrs.cache.type.Type#encode317()
+	 */
+	@Override
+	public ByteBuffer encode317() {
+		ByteBuffer buffer = ByteBuffer.allocate(1132);
+		return (ByteBuffer) buffer.flip();
+	}
 
 	/**
 	 * @return the ambient

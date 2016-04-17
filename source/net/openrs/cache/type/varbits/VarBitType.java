@@ -79,6 +79,25 @@ public class VarBitType implements Type {
 		buffer.put((byte) 0);
 		return (ByteBuffer) buffer.flip();
 	}
+	
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see net.openrs.cache.type.Type#encode317()
+	 */
+	@Override
+	public ByteBuffer encode317() {
+		ByteBuffer buffer = ByteBuffer.allocate(6);
+		if (configID != -1 || leastSigBit != -1 || mostSigBit != -1) {
+			buffer.put((byte) 1);
+			buffer.putShort((short) configID);
+			buffer.put((byte) leastSigBit);
+			buffer.put((byte) mostSigBit);
+		}
+
+		buffer.put((byte) 0);
+		return (ByteBuffer) buffer.flip();
+	}
 
 	public int getID() {
 		return id;

@@ -32,6 +32,7 @@ import java.util.zip.CRC32;
 import net.openrs.cache.ReferenceTable.Entry;
 import net.openrs.cache.type.CacheIndex;
 import net.openrs.cache.type.ConfigArchive;
+import net.openrs.cache.util.XTEAManager;
 import net.openrs.util.ByteBufferUtils;
 import net.openrs.util.crypto.Djb2;
 import net.openrs.util.crypto.Whirlpool;
@@ -66,10 +67,11 @@ public final class Cache implements Closeable {
 		this.store = store;
 
 		this.references = new HashMap<>(store.getTypeCount());
+		
 		for (int type = 0; type < store.getTypeCount(); type++) {
 			ByteBuffer buf = store.read(255, type);
 			if (buf != null && buf.limit() > 0) {
-				this.references.put(type, ReferenceTable.decode(Container.decode(buf).getData()));
+				this.references.put(type, ReferenceTable.decode(Container.decode(buf, XTEAManager.lookupTable(type)).getData()));
 			}
 		}
 	}
@@ -311,6 +313,25 @@ public final class Cache implements Closeable {
 	 *             if an I/O error occurs.
 	 */
 	public void write(int type, int file, Container container) throws IOException {
+		write(type, file, container, XTEAManager.NULL_KEYS);
+	}
+	
+	/**
+	 * Writes a file to the cache and updates the {@link ReferenceTable} that it
+	 * is associated with.
+	 * 
+	 * @param type
+	 *            The type of file.
+	 * @param file
+	 *            The file id.
+	 * @param container
+	 *            The {@link Container} to write.
+	 * @param keys
+	 *            The encryption keys.
+	 * @throws IOException
+	 *             if an I/O error occurs.
+	 */
+	public void write(int type, int file, Container container, int[] keys) throws IOException {
 		/* we don't want people reading/manipulating these manually */
 		if (type == 255)
 			throw new IOException("Reference tables can only be modified with the low level FileStore API!");
@@ -323,7 +344,7 @@ public final class Cache implements Closeable {
 		ReferenceTable table = ReferenceTable.decode(tableContainer.getData());
 
 		/* grab the bytes we need for the checksum */
-		ByteBuffer buffer = container.encode();
+		ByteBuffer buffer = container.encode(keys);
 		byte[] bytes = new byte[buffer.limit() - 2]; // last two bytes are the
 														// version and shouldn't
 														// be included
@@ -365,7 +386,7 @@ public final class Cache implements Closeable {
 		/* save the file itself */
 		store.write(type, file, buffer);
 	}
-
+	
 	/**
 	 * Writes a file contained in an archive to the cache.
 	 * 
@@ -381,6 +402,26 @@ public final class Cache implements Closeable {
 	 *             if an I/O error occurs.
 	 */
 	public void write(int type, int file, int member, ByteBuffer data) throws IOException {
+		write(type, file, member, data, XTEAManager.NULL_KEYS);
+	}
+
+	/**
+	 * Writes a file contained in an archive to the cache.
+	 * 
+	 * @param type
+	 *            The type of file.
+	 * @param file
+	 *            The id of the archive.
+	 * @param member
+	 *            The file within the archive.
+	 * @param data
+	 *            The data to write.
+	 * @param keys
+	 *            The encryption keys.
+	 * @throws IOException
+	 *             if an I/O error occurs.
+	 */
+	public void write(int type, int file, int member, ByteBuffer data, int[] keys) throws IOException {
 		/* grab the reference table */
 		Container tableContainer = Container.decode(store.read(255, type));
 		ReferenceTable table = ReferenceTable.decode(tableContainer.getData());
@@ -442,6 +483,6 @@ public final class Cache implements Closeable {
 
 		/* and write the archive back to memory */
 		Container container = new Container(containerType, archive.encode(), containerVersion);
-		write(type, file, container);
+		write(type, file, container, keys);
 	}
 }

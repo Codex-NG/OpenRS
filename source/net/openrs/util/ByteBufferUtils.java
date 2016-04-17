@@ -220,6 +220,16 @@ public final class ByteBufferUtils {
 	}
 
 	/**
+	 * Puts a 317 format String into the buffer
+	 * @param buffer
+	 * @param text
+	 */
+	public static void putString317(ByteBuffer buffer, String val) {
+		buffer.put(val.getBytes());
+		buffer.put((byte) 10);
+	}
+	
+	/**
 	 * Default private constructor to prevent instantiation.
 	 */
 	private ByteBufferUtils() {

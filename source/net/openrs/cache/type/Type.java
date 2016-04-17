@@ -33,6 +33,8 @@ public interface Type {
 	public void decode(ByteBuffer buffer);
 
 	public ByteBuffer encode();
+	
+	public ByteBuffer encode317();
 
 	public int getID();
 

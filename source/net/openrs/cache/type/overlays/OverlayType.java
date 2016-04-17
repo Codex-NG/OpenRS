@@ -102,6 +102,37 @@ public class OverlayType implements Type {
 		buffer.put((byte) 0);
 		return (ByteBuffer) buffer.flip();
 	}
+	
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see net.openrs.cache.type.Type#encode317()
+	 */
+	@Override
+	public ByteBuffer encode317() {
+		ByteBuffer buffer = ByteBuffer.allocate(10);
+
+		if (rgbColor != -1) {
+			buffer.put((byte) 1);
+			ByteBufferUtils.putMedium(buffer, rgbColor);
+		}
+
+		if (texture != -1) {
+			buffer.put((byte) 2);
+			buffer.put((byte) texture);
+		}
+
+		if (!hideUnderlay)
+			buffer.put((byte) 5);
+
+		if (secondaryRgbColor != -1) {
+			buffer.put((byte) 7);
+			ByteBufferUtils.putMedium(buffer, secondaryRgbColor);
+		}
+
+		buffer.put((byte) 0);
+		return (ByteBuffer) buffer.flip();
+	}
 
 	/*
 	 * (non-Javadoc)

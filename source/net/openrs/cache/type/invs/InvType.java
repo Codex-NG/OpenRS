@@ -72,6 +72,23 @@ public class InvType implements Type {
 		buffer.put((byte) 0);
 		return (ByteBuffer) buffer.flip();
 	}
+	
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see net.openrs.cache.type.Type#encode317()
+	 */
+	@Override
+	public ByteBuffer encode317() {
+		ByteBuffer buffer = ByteBuffer.allocate(4);
+		if (capacity != 0) {
+			buffer.put((byte) 2);
+			buffer.putShort((short) capacity);
+		}
+
+		buffer.put((byte) 0);
+		return (ByteBuffer) buffer.flip();
+	}
 
 	/*
 	 * (non-Javadoc)

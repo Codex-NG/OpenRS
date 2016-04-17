@@ -34,5 +34,7 @@ public final class Constants {
 	public static final String MODEL_PATH = "./repository/models/";
 	public static final String SPRITE_PATH = "./repository/sprites/";
 	public static final String MAP_PATH = "./repository/maps/";
+	public static final String XTABLE_PATH = "./repository/xtea/tables/";
+	public static final String XMAP_PATH = "./repository/xtea/maps/";
 	public static final String TYPE_PATH = "./repository/types/";
 }

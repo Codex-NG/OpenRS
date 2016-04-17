@@ -68,6 +68,22 @@ public class VarClientStringType implements Type {
 		return (ByteBuffer) buffer.flip();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see net.openrs.cache.type.Type#encode317()
+	 */
+	@Override
+	public ByteBuffer encode317() {
+		ByteBuffer buffer = ByteBuffer.allocate(1);
+		if (serialize) {
+			buffer.put((byte) 2);
+		}
+
+		buffer.put((byte) 0);
+		return (ByteBuffer) buffer.flip();
+	}
+	
 	public int getID() {
 		return id;
 	}

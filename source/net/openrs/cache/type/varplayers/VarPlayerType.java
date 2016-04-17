@@ -67,6 +67,23 @@ public class VarPlayerType implements Type {
 		buffer.put((byte) 0);
 		return (ByteBuffer) buffer.flip();
 	}
+	
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see net.openrs.cache.type.Type#encode317()
+	 */
+	@Override
+	public ByteBuffer encode317() {
+		ByteBuffer buffer = ByteBuffer.allocate(4);
+		if (configType != 0) {
+			buffer.put((byte) 5);
+			buffer.putShort((short) configType);
+		}
+
+		buffer.put((byte) 0);
+		return (ByteBuffer) buffer.flip();
+	}
 
 	public int getID() {
 		return id;

@@ -109,6 +109,17 @@ public class SpotAnimType implements Type {
 		ByteBuffer buffer = ByteBuffer.allocate(39);
 		return (ByteBuffer) buffer.flip();
 	}
+	
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see net.openrs.cache.type.Type#encode317()
+	 */
+	@Override
+	public ByteBuffer encode317() {
+		ByteBuffer buffer = ByteBuffer.allocate(39);
+		return (ByteBuffer) buffer.flip();
+	}
 
 	/*
 	 * (non-Javadoc)
