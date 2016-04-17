@@ -21,16 +21,12 @@
  */
 package net.openrs.cache.tools;
 
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import net.openrs.cache.Cache;
 import net.openrs.cache.Constants;
 import net.openrs.cache.FileStore;
+import net.openrs.cache.util.XTEAManager;
 
 /**
  * @author Kyle Friz
@@ -45,17 +41,7 @@ public class MapVerifier {
 		try {
 			Cache cache = new Cache(FileStore.open(Constants.CACHE_PATH));
 			for (int i = 0; i < 32_768; i++) {
-				int[] keys = new int[] { 0, 0, 0, 0 };
-				File f = new File(Constants.KEYS_PATH, i + ".txt");
-				if (f.exists()) {
-					List<Integer> list = new ArrayList<Integer>();
-					Files.lines(Paths.get(".").resolve(Constants.KEYS_PATH + f.getName())).forEach((String line) -> {
-						list.add(Integer.valueOf(line));
-					});
-					for (int idx = 0; idx < 4; idx++) {
-						keys[idx] = list.get(idx);
-					}
-				}
+				int[] keys = XTEAManager.lookupMap(i);
 				int land = cache.getFileId(5, "l" + (i >> 8) + "_" + (i & 0xFF));
 
 				if (land != -1) {

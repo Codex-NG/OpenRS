@@ -28,11 +28,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import javax.imageio.ImageIO;
 
@@ -40,12 +36,12 @@ import net.openrs.cache.Cache;
 import net.openrs.cache.Constants;
 import net.openrs.cache.Container;
 import net.openrs.cache.FileStore;
-import net.openrs.cache.region.Location;
 import net.openrs.cache.region.Region;
 import net.openrs.cache.sprite.Textures;
 import net.openrs.cache.type.TypeListManager;
 import net.openrs.cache.type.overlays.OverlayType;
 import net.openrs.cache.type.underlays.UnderlayType;
+import net.openrs.cache.util.XTEAManager;
 import net.openrs.util.ImageFlip;
 
 /**
@@ -172,24 +168,13 @@ public class MapImageDumper {
 				graphics.drawRect(baseX, baseY, 64, 64);
 			}
 
-			int c = 0;
 			graphics.setColor(new Color(255, 0, 0, 100));
 			for (int i = 0; i < 32768; i++) {
 				Region region = new Region(i);
 				int baseX = region.getBaseX();
 				int baseY = region.getBaseY();
 
-				int[] keys = new int[] { 0, 0, 0, 0 };
-				File f = new File(Constants.KEYS_PATH, i + ".txt");
-				if (f.exists()) {
-					List<Integer> list = new ArrayList<Integer>();
-					Files.lines(Paths.get(".").resolve(Constants.KEYS_PATH + f.getName())).forEach((String line) -> {
-						list.add(Integer.valueOf(line));
-					});
-					for (int idx = 0; idx < 4; idx++) {
-						keys[idx] = list.get(idx);
-					}
-				}
+				int[] keys = XTEAManager.lookupMap(i);
 
 				int land = cache.getFileId(5, "l" + (i >> 8) + "_" + (i & 0xFF));
 				if (land != -1) {
@@ -199,10 +184,6 @@ public class MapImageDumper {
 
 					try {
 						region.loadLocations(Container.decode(buffer, keys).getData());
-						c += region.getLocations().size();
-						for (Location l : region.getLocations()) {
-							image.setRGB(l.getPosition().getX(), l.getPosition().getY(), Color.MAGENTA.getRGB());
-						}
 					} catch (Exception e) {
 						graphics.fillRect(baseX, baseY, 64, 64);
 						System.out.println(region.getRegionID() + ", " + Arrays.toString(keys));
@@ -222,7 +203,6 @@ public class MapImageDumper {
 				int width = graphics.getFontMetrics().stringWidth(text) / 2;
 				flippedGraphics.drawString(text, ((baseX + 31) - width), (baseY + 36));
 			}
-System.out.println(c);
 			ImageIO.write(flipped, "png", new File("map_image.png"));
 			ImageIO.write(ImageFlip.verticalFlip(underlayImage), "png", new File("underlay_image.png"));
 		} catch (IOException e) {

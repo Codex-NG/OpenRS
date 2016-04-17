@@ -30,7 +30,6 @@ public final class Constants {
 	public static final String CACHE_PATH = "./repository/cache/";
 	public static final String CACHEO_PATH = "./repository/cache-other/";
 	public static final String CACHETMP_PATH = "./repository/cache-tmp/";
-	public static final String KEYS_PATH = "./repository/keys/";
 	public static final String MODEL_PATH = "./repository/models/";
 	public static final String SPRITE_PATH = "./repository/sprites/";
 	public static final String MAP_PATH = "./repository/maps/";

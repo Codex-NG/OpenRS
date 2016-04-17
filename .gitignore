@@ -3,6 +3,7 @@
 /.gradle/
 /.settings/
 /bytecode/
+/repository/cache/
 /repository/cache-other/
 /repository/cache-tmp/
 /repository/maps/
